@@ -28,8 +28,9 @@ int board[DIM_MAX][DIM_MAX];
 
 // dimensions
 int d;
-//global variables
-int x, y;
+//coordinates
+int space_i, space_j;
+int tile_i, tile_j;
 
 // prototypes
 void clear(void);
@@ -38,6 +39,9 @@ void init(void);
 void draw(void);
 bool move(int tile);
 bool won(void);
+
+bool legalMove(void);
+void swapTile(int tile);
 
 int main(int argc, string argv[])
 {
@@ -58,8 +62,8 @@ int main(int argc, string argv[])
     }
     else
     {
-        x=d-1;
-        y=d-1;
+        space_i=d-1;
+        space_j=d-1;
     }
 
     // open log
@@ -177,8 +181,9 @@ void init(void)
         int temp = board[d - 1][d - 2];
         board[d - 1][d - 2] = board[d - 1][d - 3];
         board[d - 1][d - 3] = temp; 
-    }  
+    } 
 }
+
 
 /**
  * Prints the board in its current state.
@@ -213,21 +218,18 @@ bool move(int tile)
         {
             if(tile == board[i][j]) 
             {
-                int space = 0;       
- 
-                if (((x == (i - 1)) && (j == y)) ||  ((x == (i + 1)) && (j == y)) ||
-                ((i == x) && (y == (j - 1))) || ((i == x) && (y == (j + 1))))
-                {
-                    board[x][y] = tile;
-                    board[i][j] = space;
-                    x=i;
-                    y=j;
-                    return true;
-                }   
+                tile_i=i;
+                tile_j=j;
             } 
         }
     }
-    return false;
+    if (legalMove())
+    {
+        swapTile(tile); 
+        return true;
+    }
+    else
+        return false;
 }
 
 /**
@@ -250,4 +252,38 @@ bool won(void)
         return true;
     else
         return false;
+}
+
+/**
+ * Check for the blank space near to tile
+ */
+bool legalMove(void)
+{
+    // check up tile for 0
+    if (tile_i > 0 && board[tile_i - 1][tile_j] == 0)
+        return true;
+    // bottom
+    if (tile_i < d-1 && board[tile_i + 1][tile_j] == 0)
+        return true;
+    // left
+    if (tile_j > 0 && board[tile_i][tile_j - 1] == 0)
+        return true;
+    // right
+    if (tile_j < d-1 && board[tile_i][tile_j + 1] == 0)
+        return true;
+    else
+        return false;
+}
+
+/**
+ * Swap blank tile with tile
+ */
+void swapTile(tile)
+{
+    int temp = board[tile_i][tile_j];
+    board[tile_i][tile_j] = board[space_i][space_j];
+    board[space_i][space_j] = temp;
+    
+    space_i = tile_i;
+    space_j = tile_j;
 }
