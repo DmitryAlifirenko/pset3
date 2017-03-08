@@ -12,30 +12,47 @@ const int MAX1 = 65536;
 /**
  * Returns true if value is in array of n values, else false.
  */
-bool search(int value, int values[], int n)
+ 
+bool recursion(int value, int values[], int begin, int end)
 {
-    int begin = 0;
-    int end = n - 1;
-    int middle = (begin + end) / 2;
-
+    // If array of one element
+    if (end - begin == 0)
+    {
+        if (value == values[end])
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    int middle = (begin + end )/ 2;
     while (begin <= end)
     {
-    if (values[middle] == value)
-        return true;
-    else if (value < values[middle])
-    {
-        end = middle - 1;
-        middle = (begin + end) / 2;
-    }
-    else if (value > values[middle])
-    {
-        begin = middle + 1;
-        middle = (begin + end) / 2;
-    }
-    else 
-        break;
+        if (values[middle] == value)
+        {
+            return true;
+        }
+        
+        if (value < values[middle])
+        {
+            return recursion(value, values, begin, middle);
+        }
+        
+        else if (value > values[middle])
+        {
+            return recursion(value, values, middle+1, end);
+        }
     }
     return false;
+} 
+ 
+ 
+bool search(int value, int values[], int n)
+{   
+    return recursion(value, values, 0, n-1);   
 }
 
 /**
