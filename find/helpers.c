@@ -18,7 +18,7 @@ bool recursion(int value, int values[], int begin, int end)
     // If array of one element
     if (end - begin == 0)
     {
-        return (value == values[end]);
+        return value == values[end];
     }
     
     int middle = (begin + end )/ 2;
