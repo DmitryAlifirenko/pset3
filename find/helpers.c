@@ -18,34 +18,26 @@ bool recursion(int value, int values[], int begin, int end)
     // If array of one element
     if (end - begin == 0)
     {
-        if (value == values[end])
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (value == values[end]);
     }
     
     int middle = (begin + end )/ 2;
-    while (begin <= end)
+
+    if (values[middle] == value)
     {
-        if (values[middle] == value)
-        {
-            return true;
-        }
-        
-        if (value < values[middle])
-        {
-            return recursion(value, values, begin, middle);
-        }
-        
-        else if (value > values[middle])
-        {
-            return recursion(value, values, middle+1, end);
-        }
+        return true;
     }
+    
+    if (value < values[middle])
+    {
+        return recursion(value, values, begin, middle);
+    }
+    
+    else if (value > values[middle])
+    {
+        return recursion(value, values, middle+1, end);
+    }
+
     return false;
 } 
  
